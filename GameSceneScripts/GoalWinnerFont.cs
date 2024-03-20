@@ -10,6 +10,8 @@ public class GoalWinnerFont : MonoBehaviour
     public TextMeshPro _goalFontText;
 
     private float _xPostionForText = 5;
+
+
     private void Awake()
     {
         if (_goalWinnerTextIntance != null && _goalWinnerTextIntance != this)
@@ -26,22 +28,22 @@ public class GoalWinnerFont : MonoBehaviour
     public void PlayerGoalLeft()
     {
         _goalFontText.text = "Goal!!!";
-        float _zRotation = Random.Range(-25f, 25f);
+        float _zRotation = Random.Range(-10f, 10f);
         _goalWinnerTextObject.transform.position = new Vector3(_xPostionForText, 0, 0);
         _goalWinnerTextObject.transform.Rotate(0, 0, _zRotation);
         _goalWinnerTextObject.transform.localScale = new Vector3(1, 1, 0);
         StartCoroutine(PlayerScored(3,_goalWinnerTextObject));
-        CrowdAnimationController._crowdAnimationInstacen.CrowdCheeringGoAnimaitonin(3);
+        CrowdAnimationController._crowdAnimationInstacen.CrowdCheeringGoAnimaitonin(5);
     }
     public void PlayerGoalRight()
     {
         _goalFontText.text = "Goal!!!";
-        float _zRotation = Random.Range(-25f, 25f);
+        float _zRotation = Random.Range(-10f, 10f);
         _goalWinnerTextObject.transform.position = new Vector3(-_xPostionForText, 0, 0);
         _goalWinnerTextObject.transform.Rotate(0, 0, _zRotation);
         _goalWinnerTextObject.transform.localScale = new Vector3(1, 1, 0);
         StartCoroutine(PlayerScored(3, _goalWinnerTextObject));
-        CrowdAnimationController._crowdAnimationInstacen.CrowdCheeringGoAnimaitonin(3);
+        CrowdAnimationController._crowdAnimationInstacen.CrowdCheeringGoAnimaitonin(5);
     }
 
     public void PlayerWinner()
@@ -50,7 +52,7 @@ public class GoalWinnerFont : MonoBehaviour
         _goalWinnerTextObject.transform.position = new Vector3(0, 0, 0);
         _goalWinnerTextObject.transform.Rotate(0, 0, 0);
         _goalWinnerTextObject.transform.localScale = new Vector3(1, 1, 0);
-        CrowdAnimationController._crowdAnimationInstacen.CrowdCheeringGoAnimaitonin(6);
+        CrowdAnimationController._crowdAnimationInstacen.CrowdCheeringGoAnimaitonin(10);
     }
 
     private IEnumerator PlayerScored(int _timer, GameObject _goal)
@@ -61,7 +63,7 @@ public class GoalWinnerFont : MonoBehaviour
             if(i == 2)
             {
                 _goal.transform.localScale = new Vector3(0, 0, 0);
-                _goal.transform.Rotate(0, 0, 0);
+                _goalWinnerTextObject.transform.Rotate(0, 0, 0);
             }
             i++;
             yield return new WaitForSeconds(1);

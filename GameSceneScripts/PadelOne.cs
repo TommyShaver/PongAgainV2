@@ -14,12 +14,15 @@ public class PadelOne : MonoBehaviour
 
     public InputAction _playerOneControls;
     public GameObject  _paddle;
+    
 
     private Rigidbody2D _rb;
+    private BoxCollider2D _collider2d;
+    
 
     private bool  _hasPowerUp;
     private bool  _hasUsedPowerUp;
-    private int[] _powerUps = { 1, 2, 3, 4, 5, 6 };
+    private int[] _powerUps = { 0, 1, 2, 3, 4, 5 };
     private int   _currentPowerUp;
     //Start Logic ===================================================
     private void Awake()
@@ -36,6 +39,7 @@ public class PadelOne : MonoBehaviour
     private void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
+        _collider2d = GetComponent<BoxCollider2D>();
     }
 
     //Input control==================================================
@@ -50,9 +54,11 @@ public class PadelOne : MonoBehaviour
 
     private void Update()
     {
+        
         //Movement on paddel y only.----------------------------------
         _moveDirection = _playerOneControls.ReadValue<Vector2>();
         _rb.velocity = new Vector2(_moveDirection.x * _padelSpeed, _moveDirection.y * _padelSpeed);
+
         //For player one power up -------------------------------------
         if(_hasPowerUp == true)
         {
@@ -62,7 +68,6 @@ public class PadelOne : MonoBehaviour
             }
         }
     }
-
 
     //Power Up's =====================================================
     //Income Data ----------------------------------------------------
@@ -77,7 +82,7 @@ public class PadelOne : MonoBehaviour
         {
             _currentPowerUp = _powerUps[Random.Range(0, _powerUps.Length)];
             _hasUsedPowerUp = true;
-            //Set Animator to right power up
+            PowerUpManager._iPowerUpManager.PowerUp(_currentPowerUp, true);
         }
     }
     //Speed of paddle ------------------------------------------------
@@ -85,31 +90,42 @@ public class PadelOne : MonoBehaviour
     {
             switch (whichPowerUp)
             {
-                case 1:
+                case 0:
                     // ball faster
                     BallMovement._instance.BallPowerUp(true);
                     break;
-                case 2:
+                case 1:
                     // ball slow down
                     BallMovement._instance.BallPowerUp(false);
                     break;
-                case 3:
+                case 2:
                     //paddle bigger
                     _paddle.transform.localScale = new Vector3(0.2f, 3f, 1f);
                     break;
+                case 3:
+                    //paddle smaller player 2
+                    PadelTwo._iPadelTwo.PowerUpEffectsPadelSize();
+                    break;
                 case 4:
-                    //paddle smaller
-                    _paddle.transform.localScale = new Vector3(0.2f, 2f, 1f);
+                    //paddle slower player 2 needs fixing
+                    PadelTwo._iPadelTwo.PowerUpEffectPadelSpeed();
                     break;
                 case 5:
-                    //paddle slower
-                    _padelSpeed = 7f;
-                    break;
-                case 6:
                     //paddle faster
                     _padelSpeed = 25f;
                     break;
             }
+        StartCoroutine(PowerUpTimer(4));
+    }
+
+    public void PowerUpEffectsPadelSize()
+    {
+        _paddle.transform.localScale = new Vector3(0.2f, 2f, 1f);
+        StartCoroutine(PowerUpTimer(4));
+    }
+    public void PowerUpEffectPadelSpeed()
+    {
+        _padelSpeed = 7f;
         StartCoroutine(PowerUpTimer(4));
     }
     //Restore state of paddle --------------------------------------
@@ -123,7 +139,6 @@ public class PadelOne : MonoBehaviour
             {
                 _padelSpeed = 15f;
                 _paddle.transform.localScale = _scaleOfPaddle;
-                //change ainmator on power manager to show power up.
                 _hasUsedPowerUp = false;
             }
             i++;

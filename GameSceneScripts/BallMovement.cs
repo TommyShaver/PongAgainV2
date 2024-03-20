@@ -127,7 +127,6 @@ public class BallMovement : MonoBehaviour
         {
             _ballLocationY = 1;
         }
-        Debug.Log(wasNorthWall);
     }
 
     
@@ -173,7 +172,7 @@ public class BallMovement : MonoBehaviour
     }
 
     //Reset Ball ================================================================
-    private void ResetBallPosition()
+    public void ResetBallPosition()
     {
         _speedOfBall = 5;
         _ball.transform.position = Vector3.zero;
